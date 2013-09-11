@@ -22,7 +22,6 @@ public class VerticalPrinter implements Printer {
 				System.out.println(row);
 			}
 		}
-
 	}
 
 }

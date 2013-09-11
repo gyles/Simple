@@ -49,9 +49,22 @@ public class Client {
 	
 	static int getPrintFormat(BufferedReader reader) throws IOException
 	{
-		System.out.print("Choose a print format (must be 0 or 1): ");
+		int printFormat = 0;
+		System.out.print("Choose a print format (must be numeric): ");
 		String input = reader.readLine();
-		return 0;
+		while (!isNumeric(input)) {
+			System.out.print("Must be a number, or type 'quit': ");
+			input = reader.readLine();
+			if (isQuit(input)) {
+				break;
+			}
+		}
+		
+		if(isNumeric(input)) {
+			printFormat = Integer.parseInt(input);
+		}
+		
+		return printFormat;
 	}
 	
 	public static void main (String[] args) throws IOException
@@ -92,9 +105,15 @@ public class Client {
 	{
 		Printer printer = null;
 		int printFormat = getPrintFormat(reader);
-		if (printFormat == 0)
+		switch (printFormat)
 		{
-			printer = new VerticalPrinter();
+			case 1:
+				printer = new FilePrinter();
+				break;
+			case 0: 
+			default:
+				printer = new VerticalPrinter();
+				break;
 		}
 		return printer;
 	}
@@ -114,7 +133,7 @@ public class Client {
 	{
 		boolean isOddNumber = false;
 		
-		if (characterSequence != null && characterSequence.matches("[\\d]+"))
+		if (isNumeric(characterSequence))
 		{
 			Integer integer = Integer.parseInt(characterSequence);
 			if (integer % 2 != 0)
@@ -134,6 +153,17 @@ public class Client {
 			isQuit = true;
 		}
 		return isQuit;
+	}
+	
+	private static boolean isNumeric(String characterSequence)
+	{
+		boolean isNumeric = false;
+		
+		if (characterSequence != null && characterSequence.matches("[\\d]+"))
+		{
+			isNumeric = true;
+		}
+		return isNumeric;
 	}
 	
 	private static List<Character> convertToCharacterList(String characterSequence)
